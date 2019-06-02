@@ -22,7 +22,6 @@ class PasswordCracker
 
 	void generateAlthabet();
 
-	void generatePassword();
 	void checkOneLetter();
 	void generateThreads(int number); //project assumption
 	void crackPasswords(int number); //project assumption
