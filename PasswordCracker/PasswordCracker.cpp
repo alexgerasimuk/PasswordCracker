@@ -1,5 +1,4 @@
 #include "PasswordCracker.h"
-#include "LoginWindow.h"
 
 void PasswordCracker::generateAlthabet()
 {
@@ -7,7 +6,7 @@ void PasswordCracker::generateAlthabet()
 }
 
 
-void PasswordCracker::checkOneLetter()
+void PasswordCracker::checkOneLetter(LoginWindow &loginWindow)
 {
 	bool result = false;
 	while (result != true) {
