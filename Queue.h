@@ -1,14 +1,15 @@
 #pragma once
-#include <string>
 #include <queue>
 #include <atomic>
 #include <mutex>
 
 
-class Queue 
-{public:
+class Queue
+{
+public:
 	std::queue<std::string> queue;
 	int maxSize;
+
 	std::atomic_bool isFull;
 	std::atomic_bool isLastOne;
 	std::mutex m_mutex;

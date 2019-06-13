@@ -28,10 +28,12 @@ std::string Queue::front()
 
 void Queue::push(std::string tmp)
 {
-	if (queue.size() < maxSize) {
+	if (this->queue.size() < maxSize)
+	{
 		queue.push(tmp);
 	}
-	else {
+	else
+	{
 		std::lock_guard<std::mutex> guard(m_mutex);
 		this->isFull = true;
 	}
@@ -39,10 +41,12 @@ void Queue::push(std::string tmp)
 
 void Queue::pop()
 {
-	if (queue.back() != queue.front()){
+	if (queue.back() != queue.front())
+	{
 		queue.pop();
 	}
-	else {
+	else
+	{
 		std::lock_guard<std::mutex> guard(m_mutex);
 		isLastOne = true;
 	}
