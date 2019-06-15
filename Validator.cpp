@@ -1,45 +1,31 @@
 #include "Validator.h"
+#include <iostream>
 
 Validator::Validator(std::string password){
 	this->password = password;
 }
 
-std::string Validator::validate(Queue& passwordsQueue, std::atomic_bool& success, std::mutex& m_mutex)
+void Validator::validate(Queue& passwordsQueue, std::atomic_bool& success, std::mutex& m_mutex, std::string &foundPassword)
 {
-	std::string passwordToValidate;
-	m_mutex.lock();
 	if (passwordsQueue.size() <= 1)
 	{
-		while (passwordsQueue.isLastOne == true)
+		while (passwordsQueue.isLastOne)
 		{
-			m_mutex.unlock();
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
-			m_mutex.lock();
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));		
 		}
-		m_mutex.unlock();
 	}
-	else
-	{
-		m_mutex.lock();
-		passwordToValidate = passwordsQueue.front();
-		passwordsQueue.pop();
-		m_mutex.unlock();
-	}
+
+	std::string passwordToValidate = passwordsQueue.front();
+	m_mutex.lock();
+	std::cout << passwordToValidate;
+	passwordsQueue.pop();
+	m_mutex.unlock();
 
 	if (passwordToValidate == password)
 	{
-		m_mutex_success.lock();
 		success = true;
-		m_mutex_success.unlock();
-		return passwordToValidate;
-	}
-	else
-	{
-		m_mutex_success.lock();
-		success = false;
-		m_mutex_success.unlock();
+		foundPassword = passwordToValidate;
 	}
 
-	validate(passwordsQueue, success, m_mutex);
-	return nullptr;
+	validate(passwordsQueue, success, m_mutex, foundPassword);
 }

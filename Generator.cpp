@@ -1,6 +1,6 @@
 #include "Generator.h"
 #include <thread>
-#include <iostream>
+
 
 void Generator::generateAlphabet()
 {
@@ -8,76 +8,51 @@ void Generator::generateAlphabet()
 	//+alphabetUpper + numerals;
 }
 
-void Generator::checkOneLetter(Queue& queue, int maxSize, int currentSize, std::mutex& m_mutex)
+void Generator::generatorWrapper(Queue& queue, int maxQueueSize, std::mutex& m_mutex, std::atomic_bool& success)
 {
-	if (currentSize == 1)
+	int size = 1;
+	while(!success)
 	{
-		for (auto k = 0; k < alphabet.length(); k++)
+//	for(int i = 0;i<4; i++){
+		checkNextLetter(queue, maxQueueSize, size, 0, m_mutex);
+		size++;
+	}
+}
+
+
+void Generator::checkNextLetter(Queue& queue, int maxQueueSize, int passwordLenght, int currentIndex, std::mutex& m_mutex)
+{
+	for(unsigned int i = 0; i < alphabet.length(); i++)
+	{
+		password[currentIndex] = alphabet[i];
+		if(queue.size() < maxQueueSize)
 		{
-			std::cout << alphabet[k];
-			password[currentSize - 1] = alphabet.at(k);
-			m_mutex.lock();
-			if (queue.size() < maxSize)
+			if ((passwordLenght - 1) == currentIndex)
 			{
+				m_mutex.lock();
 				queue.push(password);
 				m_mutex.unlock();
 			}
 			else
 			{
-				while (queue.isFull == true)
-				{
-					// Release the lock
-					m_mutex.unlock();
-					std::this_thread::sleep_for(std::chrono::milliseconds(100));
-					// Acquire the lock
-					m_mutex.lock();
-				}
-				queue.push(password);
-				m_mutex.unlock();
+				int newIndex = currentIndex + 1;
+				checkNextLetter(queue, maxQueueSize, passwordLenght, newIndex, m_mutex);
 			}
-			// Release the lock
-
-
-			if (k == alphabet.size() - 1)
-				k = 0;
 		}
-	}
-
-	for (int s = 0; s < currentSize; s++)
-	{
-		for (auto letterPosition = 0; letterPosition < alphabet.length(); letterPosition++)
+		else
 		{
-			password[s] = alphabet[letterPosition];
-			for (auto l = 0; l < alphabet.length(); l++)
+			while(queue.isFull)
 			{
-				password[currentSize + 1] = alphabet[l];
-				if (queue.size() < maxSize)
-				{
-					m_mutex.lock();
-					queue.push(password);
-					m_mutex.unlock();
-				}
-				else
-					while (queue.isFull == true)
-					{
-						m_mutex.unlock();
-						std::this_thread::sleep_for(std::chrono::milliseconds(100));
-						m_mutex.lock();
-						queue.push(password);
-					}
-				m_mutex.unlock();
-
-				if (l == alphabet.size() - 1)
-				{
-					l = 0;
-					checkOneLetter(queue, maxSize, currentSize + 1, m_mutex);
-				}
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			}
+			m_mutex.lock();
+			queue.push(password);
+			m_mutex.unlock();
 		}
 	}
 }
 
-Generator::Generator()
+Generator::Generator() : password(4, ' ')
 {
 	generateAlphabet();
 }

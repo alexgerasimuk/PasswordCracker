@@ -1,5 +1,7 @@
 #pragma once
+#include <iostream>
 #include "Queue.h"
+#include <string>
 
 class Generator
 {
@@ -8,10 +10,11 @@ class Generator
 	std::string alphabetLower = "abcdefghijklmnopqrstuvwxyz";
 	std::string alphabetUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	//	std::string specialAnsi = "!\"#¤%&/()=?`^¨*';:_,.";
-	std::string password = {};
+	std::string password;
+	void checkNextLetter(Queue& queue, int maxQueueSize, int passwordLenght, int currentIndex, std::mutex& m_mutex);
 
 public:
 	Generator();
 	void generateAlphabet();
-	void checkOneLetter(Queue& queue, int maxSize, int currentSize, std::mutex& m_mutex);
+	void Generator::generatorWrapper(Queue& queue, int currentIndex, std::mutex& m_mutex, std::atomic_bool& success);
 };

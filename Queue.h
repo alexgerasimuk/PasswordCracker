@@ -8,7 +8,7 @@ class Queue
 {
 public:
 	std::queue<std::string> queue;
-	int maxSize;
+	unsigned int maxSize;
 
 	std::atomic_bool isFull;
 	std::atomic_bool isLastOne;

@@ -4,6 +4,7 @@ Queue::Queue(int size)
 {
 	this->maxSize = size;
 	this->isFull = false;
+	this->isLastOne = true;
 }
 
 std::queue<std::string> Queue::getQueue()
@@ -28,9 +29,13 @@ std::string Queue::front()
 
 void Queue::push(std::string tmp)
 {
-	if (this->queue.size() < maxSize)
+	if (queue.size() < maxSize)
 	{
 		queue.push(tmp);
+		if(queue.size() > 1)
+		{
+			isLastOne = false;
+		}
 	}
 	else
 	{
@@ -44,6 +49,7 @@ void Queue::pop()
 	if (queue.back() != queue.front())
 	{
 		queue.pop();
+		isFull = false;
 	}
 	else
 	{
