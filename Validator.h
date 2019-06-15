@@ -2,8 +2,6 @@
 #include <string>
 #include "Queue.h"
 
-class Queue;
-
 class Validator
 {
 	std::string password;

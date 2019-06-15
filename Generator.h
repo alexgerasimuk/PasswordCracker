@@ -1,6 +1,5 @@
 #pragma once
 #include "Queue.h"
-#include <mutex>
 
 class Generator
 {

@@ -1,7 +1,7 @@
 #include "Validator.h"
 
-Validator::Validator(std::string password): password(password)
-{
+Validator::Validator(std::string password){
+	this->password = password;
 }
 
 std::string Validator::validate(Queue& passwordsQueue, std::atomic_bool& success, std::mutex& m_mutex)

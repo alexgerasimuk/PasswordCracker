@@ -3,8 +3,6 @@
 #include "Validator.h"
 #include "Generator.h"
 #include "Queue.h"
-#include <atomic>
-#include <mutex>
 
 unsigned int queueSize = 0, validatorNum = 0;
 std::atomic_int currNumOfThreads;
