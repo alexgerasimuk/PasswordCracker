@@ -9,5 +9,5 @@ class Validator
 public:
 
 	Validator(std::string password);
-	void validate(Queue& passwordsQueue, std::atomic_bool&, std::mutex& m_mutex, std::string &foundPassword);
+	void validate(Queue& passwordsQueue, std::atomic_bool&, std::string &foundPassword);
 };

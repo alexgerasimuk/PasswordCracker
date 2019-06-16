@@ -1,11 +1,12 @@
 #include "Validator.h"
 #include <iostream>
+#include <thread>
 
 Validator::Validator(std::string password){
 	this->password = password;
 }
 
-void Validator::validate(Queue& passwordsQueue, std::atomic_bool& success, std::mutex& m_mutex, std::string &foundPassword)
+void Validator::validate(Queue& passwordsQueue, std::atomic_bool& success, std::string &foundPassword)
 {
 	if (passwordsQueue.size() <= 1)
 	{
@@ -16,16 +17,15 @@ void Validator::validate(Queue& passwordsQueue, std::atomic_bool& success, std::
 	}
 
 	std::string passwordToValidate = passwordsQueue.front();
-	m_mutex.lock();
 	std::cout << passwordToValidate;
 	passwordsQueue.pop();
-	m_mutex.unlock();
 
 	if (passwordToValidate == password)
 	{
 		success = true;
 		foundPassword = passwordToValidate;
+		return;
 	}
 
-	validate(passwordsQueue, success, m_mutex, foundPassword);
+	validate(passwordsQueue, success, foundPassword);
 }

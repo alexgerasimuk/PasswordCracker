@@ -11,7 +11,7 @@ std::string alphabet;
 std::string numerals = "0123456789";
 std::string alphabetLower = "abcdefghijklmnopqrstuvwxyz";
 std::string alphabetUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-std::string specialAnsi = "!\"#¤%&/()=?`^¨*';:_,.";
+std::string specialAnsi = "!\"#ï¿½%&/()=?`^ï¿½*';:_,.";
 std::string randomGeneratedPassword;
 
 void menu()
@@ -47,41 +47,26 @@ void createPasswords(std::string& randomGeneratedPasswords)
 int main(int argc, char* argv[])
 {
 	std::mutex m_mutex;
-	std::atomic_bool success = false;
+	std::atomic_bool success(false);
 	std::string foundPassword = {};
 
 	menu();
 	generateAlthabet();
-	createPasswords(randomGeneratedPassword); //stworzenie hase³ do z³amania
+	createPasswords(randomGeneratedPassword); //stworzenie haseï¿½ do zï¿½amania
 	std::cout << "Wygenerowane haslo do zlamania to: " << randomGeneratedPassword;
 	Validator* validatorPointer = new Validator(randomGeneratedPassword);
 	Generator* generatorPointer = new Generator();
 	Queue generatedPasswordsQueue(queueSize);
 
-	std::thread g1{&Generator::generatorWrapper, generatorPointer, std::ref(generatedPasswordsQueue), queueSize, std::ref(m_mutex), std::ref(success)};
+	std::thread g1{&Generator::generatorWrapper, generatorPointer, std::ref(generatedPasswordsQueue), queueSize, std::ref(success)};
 	std::vector<std::thread> validation;
 	for (unsigned int i = 0; i < validatorNum; i++)
 	{
-		validation.push_back(std::thread{ &Validator::validate, validatorPointer, std::ref(generatedPasswordsQueue), std::ref(success), std::ref(m_mutex), std::ref(foundPassword) });
+		validation.push_back(std::thread{ &Validator::validate, validatorPointer, std::ref(generatedPasswordsQueue), std::ref(success), std::ref(foundPassword) });
 	}
 
-//	while (!success)
-//	{
-//		if (validation.size() < validatorNum)
-//		{
-//			for (unsigned int i = validation.size(); i < validatorNum; i++)
-//			{
-//				validation[i] = std::thread{&Validator::validate,validatorPointer, std::ref(generatedPasswordsQueue), std::ref(success), std::ref(m_mutex), std::ref(foundPassword) };
-//			}
-//		}
-//	}
-	g1.join();
+ 	g1.join();
 	validation[0].join();
-//	system("pause");
-//	for (unsigned int i = 0; i < validatorNum; i++)
-//	{
-//		validation[i].join();
-//	}
 
 	if (success)
 	{

@@ -8,19 +8,18 @@ void Generator::generateAlphabet()
 	//+alphabetUpper + numerals;
 }
 
-void Generator::generatorWrapper(Queue& queue, int maxQueueSize, std::mutex& m_mutex, std::atomic_bool& success)
+void Generator::generatorWrapper(Queue& queue, int maxQueueSize, std::atomic_bool& success)
 {
 	int size = 1;
 	while(!success)
 	{
-//	for(int i = 0;i<4; i++){
-		checkNextLetter(queue, maxQueueSize, size, 0, m_mutex);
+		checkNextLetter(queue, maxQueueSize, size, 0);
 		size++;
 	}
 }
 
 
-void Generator::checkNextLetter(Queue& queue, int maxQueueSize, int passwordLenght, int currentIndex, std::mutex& m_mutex)
+void Generator::checkNextLetter(Queue& queue, int maxQueueSize, int passwordLenght, int currentIndex)
 {
 	for(unsigned int i = 0; i < alphabet.length(); i++)
 	{
@@ -29,14 +28,12 @@ void Generator::checkNextLetter(Queue& queue, int maxQueueSize, int passwordLeng
 		{
 			if ((passwordLenght - 1) == currentIndex)
 			{
-				m_mutex.lock();
 				queue.push(password);
-				m_mutex.unlock();
 			}
 			else
 			{
 				int newIndex = currentIndex + 1;
-				checkNextLetter(queue, maxQueueSize, passwordLenght, newIndex, m_mutex);
+				checkNextLetter(queue, maxQueueSize, passwordLenght, newIndex);
 			}
 		}
 		else
@@ -45,9 +42,7 @@ void Generator::checkNextLetter(Queue& queue, int maxQueueSize, int passwordLeng
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			}
-			m_mutex.lock();
 			queue.push(password);
-			m_mutex.unlock();
 		}
 	}
 }

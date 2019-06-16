@@ -2,9 +2,9 @@
 
 Queue::Queue(int size)
 {
-	this->maxSize = size;
-	this->isFull = false;
-	this->isLastOne = true;
+	maxSize = size;
+	isFull = false;
+	isLastOne = true;
 }
 
 std::queue<std::string> Queue::getQueue()
@@ -24,11 +24,13 @@ std::string Queue::back()
 
 std::string Queue::front()
 {
+    std::lock_guard<std::mutex> lock(m_mutex);
 	return queue.front();
 }
 
 void Queue::push(std::string tmp)
 {
+    std::lock_guard<std::mutex> lock(m_mutex);
 	if (queue.size() < maxSize)
 	{
 		queue.push(tmp);
@@ -46,6 +48,7 @@ void Queue::push(std::string tmp)
 
 void Queue::pop()
 {
+    std::lock_guard<std::mutex> lock(m_mutex);
 	if (queue.back() != queue.front())
 	{
 		queue.pop();
