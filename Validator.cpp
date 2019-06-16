@@ -2,23 +2,15 @@
 #include <iostream>
 #include <thread>
 
-Validator::Validator(std::string password){
+Validator::Validator(std::string password, Queue& queue) : passwordsQueue(queue)
+{
 	this->password = password;
 }
 
-void Validator::validate(Queue& passwordsQueue, std::atomic_bool& success, std::string &foundPassword)
+void Validator::validate(std::atomic_bool& success, std::string &foundPassword)
 {
-	if (passwordsQueue.size() <= 1)
-	{
-		while (passwordsQueue.isLastOne)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));		
-		}
-	}
-
 	std::string passwordToValidate = passwordsQueue.front();
-	std::cout << passwordToValidate;
-	passwordsQueue.pop();
+	std::cout << passwordToValidate << '\n';
 
 	if (passwordToValidate == password)
 	{
@@ -27,5 +19,5 @@ void Validator::validate(Queue& passwordsQueue, std::atomic_bool& success, std::
 		return;
 	}
 
-	validate(passwordsQueue, success, foundPassword);
+	validate(success, foundPassword);
 }

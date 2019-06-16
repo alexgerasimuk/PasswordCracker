@@ -11,10 +11,11 @@ class Generator
 	std::string alphabetUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	//	std::string specialAnsi = "!\"#�%&/()=?`^�*';:_,.";
 	std::string password;
-	void checkNextLetter(Queue& queue, int maxQueueSize, int passwordLenght, int currentIndex);
+    Queue& queue;
+    void checkNextLetter(int maxQueueSize, int passwordLenght, int currentIndex);
 
 public:
-	Generator();
+	Generator(Queue& queue);
 	void generateAlphabet();
-	void generatorWrapper(Queue& queue, int currentIndex, std::atomic_bool& success);
+	void generatorWrapper(int currentIndex, std::atomic_bool& success);
 };

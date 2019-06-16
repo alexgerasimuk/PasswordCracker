@@ -46,7 +46,6 @@ void createPasswords(std::string& randomGeneratedPasswords)
 
 int main(int argc, char* argv[])
 {
-	std::mutex m_mutex;
 	std::atomic_bool success(false);
 	std::string foundPassword = {};
 
@@ -54,15 +53,15 @@ int main(int argc, char* argv[])
 	generateAlthabet();
 	createPasswords(randomGeneratedPassword); //stworzenie hase� do z�amania
 	std::cout << "Wygenerowane haslo do zlamania to: " << randomGeneratedPassword;
-	Validator* validatorPointer = new Validator(randomGeneratedPassword);
-	Generator* generatorPointer = new Generator();
-	Queue generatedPasswordsQueue(queueSize);
+    Queue generatedPasswordsQueue(queueSize);
+	Validator* validatorPointer = new Validator(randomGeneratedPassword, generatedPasswordsQueue);
+	Generator* generatorPointer = new Generator(generatedPasswordsQueue);
 
-	std::thread g1{&Generator::generatorWrapper, generatorPointer, std::ref(generatedPasswordsQueue), queueSize, std::ref(success)};
+	std::thread g1{&Generator::generatorWrapper, generatorPointer, queueSize, std::ref(success)};
 	std::vector<std::thread> validation;
 	for (unsigned int i = 0; i < validatorNum; i++)
 	{
-		validation.push_back(std::thread{ &Validator::validate, validatorPointer, std::ref(generatedPasswordsQueue), std::ref(success), std::ref(foundPassword) });
+		validation.push_back(std::thread{ &Validator::validate, validatorPointer, std::ref(success), std::ref(foundPassword)});
 	}
 
  	g1.join();

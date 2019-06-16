@@ -9,9 +9,6 @@ class Queue
 public:
 	std::queue<std::string> queue;
 	unsigned int maxSize;
-
-	std::atomic_bool isFull;
-	std::atomic_bool isLastOne;
 	std::mutex m_mutex;
 
 	Queue(int size);
@@ -22,4 +19,5 @@ public:
 	void push(std::string tmp);
 	void pop();
 	bool empty();
+    bool isFull();
 };

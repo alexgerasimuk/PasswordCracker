@@ -8,18 +8,18 @@ void Generator::generateAlphabet()
 	//+alphabetUpper + numerals;
 }
 
-void Generator::generatorWrapper(Queue& queue, int maxQueueSize, std::atomic_bool& success)
+void Generator::generatorWrapper(int maxQueueSize, std::atomic_bool& success)
 {
 	int size = 1;
 	while(!success)
 	{
-		checkNextLetter(queue, maxQueueSize, size, 0);
+		checkNextLetter(maxQueueSize, size, 0);
 		size++;
 	}
 }
 
 
-void Generator::checkNextLetter(Queue& queue, int maxQueueSize, int passwordLenght, int currentIndex)
+void Generator::checkNextLetter(int maxQueueSize, int passwordLenght, int currentIndex)
 {
 	for(unsigned int i = 0; i < alphabet.length(); i++)
 	{
@@ -33,12 +33,12 @@ void Generator::checkNextLetter(Queue& queue, int maxQueueSize, int passwordLeng
 			else
 			{
 				int newIndex = currentIndex + 1;
-				checkNextLetter(queue, maxQueueSize, passwordLenght, newIndex);
+				checkNextLetter(maxQueueSize, passwordLenght, newIndex);
 			}
 		}
 		else
 		{
-			while(queue.isFull)
+			while(queue.isFull())
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			}
@@ -47,7 +47,7 @@ void Generator::checkNextLetter(Queue& queue, int maxQueueSize, int passwordLeng
 	}
 }
 
-Generator::Generator() : password(4, ' ')
+Generator::Generator(Queue& queue) : password(4, ' '), queue(queue)
 {
 	generateAlphabet();
 }
