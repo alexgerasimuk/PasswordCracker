@@ -5,17 +5,21 @@
 
 class Generator
 {
-	std::string alphabet;
-	std::string numerals = "0123456789";
-	std::string alphabetLower = "abcdefghijklmnopqrstuvwxyz";
-	std::string alphabetUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	//	std::string specialAnsi = "!\"#�%&/()=?`^�*';:_,.";
-	std::string password;
-    Queue& queue;
-    void checkNextLetter(int maxQueueSize, int passwordLenght, int currentIndex);
-
 public:
-	Generator(Queue& queue);
+	Generator(Queue& queue,int maxQueueSize, std::atomic_bool& success);
 	void generateAlphabet();
-	void generatorWrapper(int currentIndex, std::atomic_bool& success);
+	void generatorWrapper();
+
+private:
+    std::string alphabet;
+    std::string numerals = "0123456789";
+    std::string alphabetLower = "abcdefghijklmnopqrstuvwxyz";
+    std::string alphabetUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    std::string specialAnsi = "!\"#%&/()=?`^*';:_,.";
+    std::string password;
+    Queue& queue;
+    int maxQueueSize;
+    std::atomic_bool& success;
+
+    void checkNextLetter(int passwordLenght, int currentIndex);
 };

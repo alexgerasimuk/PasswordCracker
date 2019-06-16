@@ -6,23 +6,14 @@ Queue::Queue(int size)
 	maxSize = size;
 }
 
-std::queue<std::string> Queue::getQueue()
-{
-	return queue;
-}
-
 int Queue::size()
 {
 	return queue.size();
 }
 
-std::string Queue::back()
-{
-	return queue.back();
-}
-
 std::string Queue::front()
 {
+    std::lock_guard<std::mutex> lock_validator(validator_mutex);
     while(empty())
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));

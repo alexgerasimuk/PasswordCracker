@@ -1,0 +1,4 @@
+/media/twojmistrz/MistrzowskiDysk/Clion/CLion-2019.1.4/clion-2019.1.4/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker/cmake-build-debug

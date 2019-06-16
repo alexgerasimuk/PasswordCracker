@@ -2,22 +2,30 @@
 #include <iostream>
 #include <thread>
 
-Validator::Validator(std::string password, Queue& queue) : passwordsQueue(queue)
+Validator::Validator(std::string password, Queue& queue, std::atomic_bool& success, std::string &foundPassword)
+    : password(password), passwordsQueue(queue), success(success), foundPassword(foundPassword)
 {
-	this->password = password;
 }
 
-void Validator::validate(std::atomic_bool& success, std::string &foundPassword)
+void Validator::validate()
 {
 	std::string passwordToValidate = passwordsQueue.front();
 	std::cout << passwordToValidate << '\n';
+    if(success)
+    {
+        return;
+    }
 
 	if (passwordToValidate == password)
 	{
 		success = true;
 		foundPassword = passwordToValidate;
-		return;
 	}
 
-	validate(success, foundPassword);
+	else
+    {
+        validate();
+    }
+
 }
+

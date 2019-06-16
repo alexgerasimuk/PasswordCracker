@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker/Generator.h
+iostream
+-
+Queue.h
+/media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker/Queue.h
+string
+-
+
+/media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker/Queue.h
+queue
+-
+atomic
+-
+mutex
+-
+
+/media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker/Validator.h
+string
+-
+Queue.h
+/media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker/Queue.h
+
+/media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker/main.cpp
+iostream
+-
+thread
+-
+Validator.h
+/media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker/Validator.h
+Generator.h
+/media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker/Generator.h
+Queue.h
+/media/twojmistrz/MistrzowskiDysk/PROJECTS/PasswordCracker/Queue.h
+
